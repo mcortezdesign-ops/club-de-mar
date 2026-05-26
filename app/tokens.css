@@ -1,0 +1,62 @@
+/* Club de Mar — dark premium design tokens */
+
+:root {
+  /* ── Backgrounds (dark navy scale) ── */
+  --color-bg:       oklch(10% 0.03 240);
+  --color-bg-2:     oklch(14% 0.04 238);
+  --color-bg-3:     oklch(18% 0.05 238);
+  --color-bg-4:     oklch(23% 0.05 238);
+  --color-bg-nav:   oklch(10% 0.03 240 / 0.93);
+  --color-bg-a70:   oklch(10% 0.03 240 / 0.70);
+  --color-bg-a40:   oklch(10% 0.03 240 / 0.40);
+
+  /* ── Text ── */
+  --color-text:     oklch(97% 0.005 240);
+  --color-text-2:   oklch(74% 0.010 240);
+  --color-text-3:   oklch(50% 0.010 240);
+
+  /* ── Borders ── */
+  --color-border:   oklch(24% 0.04 238);
+  --color-border-2: oklch(33% 0.04 238);
+
+  /* ── Silver accent (#C0C8D0 ≈ oklch 81% 0.015 222) ── */
+  --color-accent:     oklch(81% 0.015 222);
+  --color-accent-dim: oklch(68% 0.012 222);
+  --color-accent-ink: oklch(12% 0.02 240);
+
+  /* ── Focus ring ── */
+  --color-focus: oklch(65% 0.18 250);
+
+  /* ── Typography ── */
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body:    "DM Sans", system-ui, -apple-system, sans-serif;
+
+  /* ── Type scale ── */
+  --text-xs:  0.75rem;
+  --text-sm:  0.875rem;
+  --text-md:  1rem;
+  --text-lg:  1.125rem;
+  --text-xl:  1.375rem;
+  --text-2xl: 1.875rem;
+  --text-3xl: 2.5rem;
+
+  /* ── Spacing (4pt) ── */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs:  0.75rem;
+  --space-sm:  1rem;
+  --space-md:  1.5rem;
+  --space-lg:  2rem;
+  --space-xl:  3rem;
+  --space-2xl: 5rem;
+
+  /* ── Motion ── */
+  --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-short: 180ms;
+  --dur-mid:   300ms;
+
+  /* ── Shape ── */
+  --radius-sm:   4px;
+  --radius-card: 8px;
+  --radius-pill: 100px;
+}
