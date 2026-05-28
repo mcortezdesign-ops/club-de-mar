@@ -35,6 +35,7 @@ interface Recipe {
   name: string;
   difficulty: string;
   time: string;
+  image: string;
   ingredients: string[];
   steps: string[];
 }
@@ -324,6 +325,7 @@ const recipes: Recipe[] = [
     name: "Merluza al horno con papas y limón",
     difficulty: "Fácil",
     time: "35 min",
+    image: "/receta_merluza.jpg",
     ingredients: [
       "Filet de merluza",
       "2 papas medianas en rodajas",
@@ -345,6 +347,7 @@ const recipes: Recipe[] = [
     name: "Langostinos al ajillo con pasta",
     difficulty: "Fácil",
     time: "20 min",
+    image: "/receta_langostinos.jpg",
     ingredients: [
       "Langostinos pelados",
       "250g de espagueti",
@@ -366,6 +369,7 @@ const recipes: Recipe[] = [
     name: "Salmón a la plancha con ensalada verde",
     difficulty: "Fácil",
     time: "25 min",
+    image: "/receta_salmon.jpg",
     ingredients: [
       "Filet de salmón rosado",
       "Rúcula y espinaca baby",
@@ -489,24 +493,35 @@ function PackCard({ pack }: { pack: Pack }) {
 function RecipeCard({ recipe }: { recipe: Recipe }) {
   return (
     <article className={s.recetaCard}>
-      <div className={s.recetaMeta}>
-        <span className={s.recetaBadge}>{recipe.difficulty}</span>
-        <span className={s.recetaBadge}>{recipe.time}</span>
+      <div className={s.recetaImgWrap}>
+        <Image
+          src={recipe.image}
+          alt={recipe.name}
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          className={s.recetaImg}
+        />
       </div>
-      <h3 className={s.recetaName}>{recipe.name}</h3>
+      <div className={s.recetaContent}>
+        <div className={s.recetaMeta}>
+          <span className={s.recetaBadge}>{recipe.difficulty}</span>
+          <span className={s.recetaBadge}>{recipe.time}</span>
+        </div>
+        <h3 className={s.recetaName}>{recipe.name}</h3>
 
-      <div>
-        <p className={s.recetaMicroLabel}>Ingredientes</p>
-        <ul className={s.recetaList}>
-          {recipe.ingredients.map((i) => <li key={i}>{i}</li>)}
-        </ul>
-      </div>
+        <div>
+          <p className={s.recetaMicroLabel}>Ingredientes</p>
+          <ul className={s.recetaList}>
+            {recipe.ingredients.map((i) => <li key={i}>{i}</li>)}
+          </ul>
+        </div>
 
-      <div>
-        <p className={s.recetaMicroLabel}>Preparación</p>
-        <ol className={s.recetaSteps}>
-          {recipe.steps.map((step) => <li key={step}>{step}</li>)}
-        </ol>
+        <div>
+          <p className={s.recetaMicroLabel}>Preparación</p>
+          <ol className={s.recetaSteps}>
+            {recipe.steps.map((step) => <li key={step}>{step}</li>)}
+          </ol>
+        </div>
       </div>
     </article>
   );

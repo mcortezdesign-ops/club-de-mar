@@ -499,10 +499,28 @@
   background-color: var(--color-bg-3);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-card);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.recetaImgWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: var(--color-bg-4);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.recetaImg {
+  object-fit: cover;
+  object-position: center;
+}
+.recetaContent {
   padding: var(--space-lg);
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
+  flex: 1;
 }
 .recetaMeta {
   display: flex;
