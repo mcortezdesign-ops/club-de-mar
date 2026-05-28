@@ -49,7 +49,7 @@ const products: Product[] = [
     name: "Filet de Merluza",
     description: "Filete fresco sin espinas, limpio y listo para cocinar.",
     price: "$15.500/kg",
-    image: "/filet_merluza.png",
+    image: "/filet_de_merluza.jpg",
     category: "frescos",
     nutrition: ["Proteína ~17g/100g", "Muy bajo en grasa (<2g)", "Fácil digestión"],
     cooking: ["A la plancha con ajo y aceite de oliva", "Al horno con papas y limón"],
