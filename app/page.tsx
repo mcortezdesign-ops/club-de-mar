@@ -1,44 +1,10 @@
 import Image from "next/image";
 import s from "./page.module.css";
-
-const WHATSAPP = "5491164034993";
-
-function waLink(product?: string) {
-  const text = product
-    ? `Hola, quiero pedir ${product} de Club de Mar. ¿Pueden confirmar disponibilidad?`
-    : `Hola, me gustaría hacer un pedido en Club de Mar.`;
-  return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
-}
-
-// ── Types ──────────────────────────────────────────────────────────────────
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: string;
-  image: string | null;
-  category: "frescos" | "congelados" | "rebozados";
-  nutrition: [string, string, string];
-  cooking: [string, string];
-}
-
-interface Pack {
-  id: string;
-  name: string;
-  description: string;
-  items: string[];
-}
-
-interface Recipe {
-  id: string;
-  name: string;
-  difficulty: string;
-  time: string;
-  image: string;
-  ingredients: string[];
-  steps: string[];
-}
+import type { Product, Pack, Recipe } from "./lib/types";
+import { Navbar } from "./components/Navbar";
+import { ProductCard } from "./components/ProductCard";
+import { FeaturedCard } from "./components/FeaturedCard";
+import { CartPanel } from "./components/CartPanel";
 
 // ── Data ───────────────────────────────────────────────────────────────────
 
@@ -53,6 +19,9 @@ const products: Product[] = [
     category: "frescos",
     nutrition: ["Proteína ~17g/100g", "Muy bajo en grasa (<2g)", "Fácil digestión"],
     cooking: ["A la plancha con ajo y aceite de oliva", "Al horno con papas y limón"],
+    origin: "Argentina",
+    type: "Fresco",
+    unit: "1 kg",
   },
   {
     id: 2,
@@ -63,6 +32,9 @@ const products: Product[] = [
     category: "frescos",
     nutrition: ["Proteína ~18g/100g", "Rico en vitamina B12", "Bajo en calorías (~96 kcal)"],
     cooking: ["Al horno con vino blanco y hierbas", "A la parrilla con limón y sal gruesa"],
+    origin: "Argentina",
+    type: "Fresco",
+    unit: "1 kg",
   },
   {
     id: 3,
@@ -73,6 +45,9 @@ const products: Product[] = [
     category: "frescos",
     nutrition: ["Proteína ~18g/100g", "Bajo en grasa y colesterol", "Fuente de fósforo"],
     cooking: ["A la plancha con ajo y perejil", "Al horno rellena con vegetales"],
+    origin: "Argentina",
+    type: "Fresco",
+    unit: "1 kg",
   },
   {
     id: 4,
@@ -83,6 +58,9 @@ const products: Product[] = [
     category: "frescos",
     nutrition: ["Proteína ~20g/100g", "Rica en Omega-3", "Fuente de vitamina D"],
     cooking: ["A la plancha con mantequilla y almendras", "A la parrilla con hierbas provenzales"],
+    origin: "Chile",
+    type: "Fresco",
+    unit: "1 kg",
   },
   {
     id: 5,
@@ -93,6 +71,9 @@ const products: Product[] = [
     category: "frescos",
     nutrition: ["Proteína ~21g/100g", "Omega-3 destacado", "Vitamina B12 y D"],
     cooking: ["Al horno con limón y alcaparras", "A la plancha con salsa de tomate fresco"],
+    origin: "Chile",
+    type: "Fresco",
+    unit: "1 kg",
   },
   {
     id: 6,
@@ -103,6 +84,9 @@ const products: Product[] = [
     category: "frescos",
     nutrition: ["Proteína ~20g/100g", "Omega-3 muy alto", "Rico en vitamina D"],
     cooking: ["A la plancha con piel crujiente", "Al horno en papillote con vegetales"],
+    origin: "Chile",
+    type: "Fresco",
+    unit: "1 kg",
   },
   // CONGELADOS PREMIUM
   {
@@ -114,6 +98,9 @@ const products: Product[] = [
     category: "congelados",
     nutrition: ["Proteína ~16g/100g", "Muy bajo en grasa", "Fuente de vitamina B12"],
     cooking: ["A la plancha con ajo y limón", "Relleno y gratinado al horno"],
+    origin: "Argentina",
+    type: "Congelado",
+    unit: "1 kg",
   },
   {
     id: 8,
@@ -124,6 +111,9 @@ const products: Product[] = [
     category: "congelados",
     nutrition: ["Proteína ~16g/100g", "Bajo en grasa", "Fuente de fósforo y zinc"],
     cooking: ["Rebozados y fritos (rabas clásicas)", "A la plancha con chimichurri"],
+    origin: "Argentina",
+    type: "Congelado",
+    unit: "1 kg",
   },
   {
     id: 9,
@@ -134,6 +124,9 @@ const products: Product[] = [
     category: "congelados",
     nutrition: ["Proteína ~16g/100g", "Muy bajo en grasa", "Fuente de zinc y selenio"],
     cooking: ["En su tinta con arroz", "A la plancha con ajo y guindilla"],
+    origin: "España",
+    type: "Congelado",
+    unit: "1 kg",
   },
   {
     id: 10,
@@ -144,6 +137,9 @@ const products: Product[] = [
     category: "congelados",
     nutrition: ["Proteína ~25g/100g", "Omega-3 alto", "Altísima densidad nutricional"],
     cooking: ["En tostadas con queso crema y alcaparras", "Con pasta en salsa crema"],
+    origin: "Argentina",
+    type: "Congelado",
+    unit: "200 g",
   },
   {
     id: 11,
@@ -154,6 +150,9 @@ const products: Product[] = [
     category: "congelados",
     nutrition: ["Proteína ~17g/100g", "Variedad de minerales y oligoelementos", "Bajo en calorías"],
     cooking: ["En paella o risotto de mariscos", "Salteado con ajo y vino blanco"],
+    origin: "Argentina",
+    type: "Congelado",
+    unit: "1 kg",
   },
   {
     id: 12,
@@ -164,6 +163,9 @@ const products: Product[] = [
     category: "congelados",
     nutrition: ["Proteína ~20g/100g", "Muy bajo en grasa (<1g)", "Fuente de zinc y selenio"],
     cooking: ["Al ajillo con pasta", "Salteado con mantequilla, ajo y limón"],
+    origin: "Argentina",
+    type: "Congelado",
+    unit: "1 kg",
   },
   {
     id: 13,
@@ -174,6 +176,9 @@ const products: Product[] = [
     category: "congelados",
     nutrition: ["Proteína ~19g/100g", "Bajo en calorías (~85 kcal)", "Fuente de yodo"],
     cooking: ["Al ajillo con arroz", "En risotto de mariscos"],
+    origin: "Argentina",
+    type: "Congelado",
+    unit: "1 kg",
   },
   {
     id: 14,
@@ -184,6 +189,9 @@ const products: Product[] = [
     category: "congelados",
     nutrition: ["Proteína ~20g/100g", "Rico en selenio", "Bajo en grasa"],
     cooking: ["A la parrilla con limón y sal gruesa", "Al vapor con mantequilla y hierbas"],
+    origin: "Argentina",
+    type: "Congelado",
+    unit: "1 kg",
   },
   {
     id: 15,
@@ -194,6 +202,9 @@ const products: Product[] = [
     category: "congelados",
     nutrition: ["Proteína ~12g/100g", "Rico en hierro y vitamina C", "Omega-3 presente"],
     cooking: ["En salsa de tomate con pasta", "Al vapor con vino blanco y ajo"],
+    origin: "Chile",
+    type: "Congelado",
+    unit: "1 kg",
   },
   {
     id: 16,
@@ -204,6 +215,9 @@ const products: Product[] = [
     category: "congelados",
     nutrition: ["Muy rico en hierro", "Bajo en calorías (~74 kcal)", "Fuente de vitaminas del grupo B"],
     cooking: ["Al vapor con limón y perejil", "En arroces y paellas"],
+    origin: "España",
+    type: "Congelado",
+    unit: "1 kg",
   },
   {
     id: 17,
@@ -214,6 +228,9 @@ const products: Product[] = [
     category: "congelados",
     nutrition: ["Bajo en grasa", "Fuente de proteína (~8g/100g)", "Muy versátil en cocina"],
     cooking: ["En ensaladas y sushi rolls", "En sandwich con palta y mayonesa"],
+    origin: "Argentina",
+    type: "Congelado",
+    unit: "250 g",
   },
   {
     id: 18,
@@ -224,6 +241,9 @@ const products: Product[] = [
     category: "congelados",
     nutrition: ["Omega-3 muy alto", "Rico en calcio y vitamina D", "Proteína ~25g/100g"],
     cooking: ["A la parrilla con limón y sal gruesa", "Al horno con tomate y hierbas"],
+    origin: "Portugal",
+    type: "Congelado",
+    unit: "1 kg",
   },
   {
     id: 19,
@@ -234,6 +254,9 @@ const products: Product[] = [
     category: "congelados",
     nutrition: ["Proteína muy alta (~30g/100g)", "Muy bajo en grasa", "Omega-3 alto"],
     cooking: ["A la plancha vuelta y vuelta (jugoso al centro)", "En tataki con soja y jengibre"],
+    origin: "Importado",
+    type: "Congelado",
+    unit: "1 kg",
   },
   {
     id: 20,
@@ -244,6 +267,9 @@ const products: Product[] = [
     category: "congelados",
     nutrition: ["Muy bajo en grasa", "Fuente de vitamina B12", "Rico en hierro y taurina"],
     cooking: ["A la plancha con pimentón dulce y aceite", "Guisado con papas y laurel"],
+    origin: "España",
+    type: "Congelado",
+    unit: "1 kg",
   },
   {
     id: 21,
@@ -254,6 +280,9 @@ const products: Product[] = [
     category: "congelados",
     nutrition: ["Proteína magra excepcional (~23g/100g)", "Muy bajo en grasa (<1g)", "Rico en vitaminas B"],
     cooking: ["A la vizcaína con tomate y pimiento", "Al pil pil (receta tradicional)"],
+    origin: "Noruega",
+    type: "Congelado",
+    unit: "1 kg",
   },
   {
     id: 22,
@@ -264,6 +293,9 @@ const products: Product[] = [
     category: "congelados",
     nutrition: ["Omega-3 muy alto", "Textura y sabor excepcionales", "Vitamina D destacada"],
     cooking: ["A la plancha con mantequilla de hierbas", "Al vapor con jengibre y soja"],
+    origin: "Antártida",
+    type: "Congelado",
+    unit: "1 kg",
   },
   {
     id: 23,
@@ -274,6 +306,9 @@ const products: Product[] = [
     category: "congelados",
     nutrition: ["Proteína ~17g/100g", "Rico en magnesio y zinc", "Bajo en calorías (~88 kcal)"],
     cooking: ["A la plancha con mantequilla y ajo (4-5 min)", "Gratinadas con queso y provenzal"],
+    origin: "Chile",
+    type: "Congelado",
+    unit: "1 kg",
   },
   {
     id: 24,
@@ -284,6 +319,9 @@ const products: Product[] = [
     category: "congelados",
     nutrition: ["Muy bajo en grasa", "Fuente de vitamina B12", "Rico en hierro y proteínas"],
     cooking: ["A la gallega con pimentón y aceite de oliva", "A la plancha con sal gruesa y limón"],
+    origin: "España",
+    type: "Congelado",
+    unit: "1 kg",
   },
   // REBOZADOS
   {
@@ -295,8 +333,13 @@ const products: Product[] = [
     category: "rebozados",
     nutrition: ["Fuente de proteína (~13g/100g)", "Listo en minutos", "Ideal para niños y toda la familia"],
     cooking: ["Al horno a 200°C sin aceite (25 min)", "Frito en poco aceite (8-10 min)"],
+    origin: "Argentina",
+    type: "Rebozado",
+    unit: "1 kg",
   },
 ];
+
+const FEATURED_IDS = [6, 12, 23];
 
 const packs: Pack[] = [
   {
@@ -408,76 +451,25 @@ const deliveryZones = [
 ];
 
 const categoryMeta = {
-  frescos:   { label: "Frescos del Día",       eyebrow: "Del mar a tu mesa" },
-  congelados:{ label: "Congelados Premium",     eyebrow: "Selección de autor" },
-  rebozados: { label: "Rebozados",              eyebrow: "Listos en minutos" },
+  frescos:    { label: "Frescos del Día",    eyebrow: "Del mar a tu mesa" },
+  congelados: { label: "Congelados Premium", eyebrow: "Selección de autor" },
+  rebozados:  { label: "Rebozados",          eyebrow: "Listos en minutos" },
 };
 
 // ── Components ─────────────────────────────────────────────────────────────
 
-function ProductCard({ product }: { product: Product }) {
-  return (
-    <article className={s.productCard}>
-      <div className={s.productImgWrap}>
-        {product.image ? (
-          <Image
-            src={product.image}
-            alt={product.name}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className={s.productImg}
-          />
-        ) : (
-          <div className={s.productImgPlaceholder} aria-hidden="true">
-            <span>{product.name}</span>
-          </div>
-        )}
-      </div>
-
-      <div className={s.productBody}>
-        <h3 className={s.productName}>{product.name}</h3>
-        <p className={s.productDesc}>{product.description}</p>
-        <p className={s.productPrice}>{product.price}</p>
-
-        <div className={s.productDivider} />
-        <p className={s.productMicroLabel}>Valores nutricionales</p>
-        <ul className={s.nutritionList}>
-          {product.nutrition.map((n) => <li key={n}>{n}</li>)}
-        </ul>
-
-        <div className={s.productDivider} />
-        <p className={s.productMicroLabel}>Cómo prepararlo</p>
-        <ul className={s.cookingList}>
-          {product.cooking.map((c) => <li key={c}>{c}</li>)}
-        </ul>
-      </div>
-
-      <div className={s.productFooter}>
-        <a
-          href={waLink(product.name)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={s.waBtn}
-          aria-label={`Pedir ${product.name} por WhatsApp`}
-        >
-          Pedir por WhatsApp
-        </a>
-      </div>
-    </article>
-  );
-}
-
 function PackCard({ pack }: { pack: Pack }) {
+  const WHATSAPP = "5491164034993";
   return (
     <article className={s.packCard}>
       <h3 className={s.packName}>{pack.name}</h3>
       <p className={s.packDesc}>{pack.description}</p>
       <ul className={s.packItems}>
-        {pack.items.map((item) => <li key={item}>{item}</li>)}
+        {pack.items.map(item => <li key={item}>{item}</li>)}
       </ul>
       <div className={s.packFooter}>
         <a
-          href={waLink(pack.name)}
+          href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hola, me interesa el ${pack.name} de Club de Mar. ¿Pueden confirmar disponibilidad?`)}`}
           target="_blank"
           rel="noopener noreferrer"
           className={s.waBtn}
@@ -508,18 +500,16 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
           <span className={s.recetaBadge}>{recipe.time}</span>
         </div>
         <h3 className={s.recetaName}>{recipe.name}</h3>
-
         <div>
           <p className={s.recetaMicroLabel}>Ingredientes</p>
           <ul className={s.recetaList}>
-            {recipe.ingredients.map((i) => <li key={i}>{i}</li>)}
+            {recipe.ingredients.map(i => <li key={i}>{i}</li>)}
           </ul>
         </div>
-
         <div>
           <p className={s.recetaMicroLabel}>Preparación</p>
           <ol className={s.recetaSteps}>
-            {recipe.steps.map((step) => <li key={step}>{step}</li>)}
+            {recipe.steps.map(step => <li key={step}>{step}</li>)}
           </ol>
         </div>
       </div>
@@ -531,43 +521,13 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
 
 export default function Home() {
   const categoriesInOrder: Array<keyof typeof categoryMeta> = ["frescos", "congelados", "rebozados"];
+  const featuredProducts = products.filter(p => FEATURED_IDS.includes(p.id));
 
   return (
     <>
-      {/* ── Nav ── */}
-      <header>
-        <nav className={s.nav} aria-label="Navegación principal">
-          <div className={s.navInner}>
-            <a href="#inicio" aria-label="Club de Mar — Inicio">
-              <Image
-                src="/CLUBDEMAR_AZUL_GRIS.png"
-                alt="Club de Mar"
-                width={160}
-                height={44}
-                priority
-                className={s.navLogo}
-              />
-            </a>
-            <ul className={s.navLinks}>
-              <li><a href="#inicio">Inicio</a></li>
-              <li><a href="#productos">Productos</a></li>
-              <li><a href="#packs">Packs</a></li>
-              <li><a href="#recetas">Recetas</a></li>
-              <li><a href="#quienes-somos">Quiénes Somos</a></li>
-            </ul>
-            <a
-              href={waLink()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={s.navCta}
-            >
-              Hacer un pedido
-            </a>
-          </div>
-        </nav>
-      </header>
+      <Navbar />
 
-      <main>
+      <main className={s.pageMain}>
         {/* ── Hero ── */}
         <section id="inicio" className={s.hero} aria-label="Portada">
           <Image
@@ -592,7 +552,7 @@ export default function Home() {
             <p className={s.heroSub}>
               Productos seleccionados con entrega en zona sur de Buenos Aires
             </p>
-            <a href="#productos" className={s.heroBtn}>
+            <a href="#destacados" className={s.heroBtn}>
               Ver productos
             </a>
           </div>
@@ -608,20 +568,33 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ── Destacados ── */}
+        <section id="destacados" className={s.featured} aria-labelledby="destacados-title">
+          <div className={s.container}>
+            <p className={s.sectionEyebrow}>Selección especial</p>
+            <h2 className={s.sectionTitle} id="destacados-title">Destacados</h2>
+            <div className={s.featuredGrid}>
+              {featuredProducts.map(product => (
+                <FeaturedCard key={product.id} product={product} />
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ── Products ── */}
         <section id="productos" className={s.products} aria-labelledby="productos-title">
           <div className={s.container}>
             <p className={s.sectionEyebrow}>Lo que traemos</p>
             <h2 className={s.sectionTitle} id="productos-title">Nuestros productos</h2>
 
-            {categoriesInOrder.map((cat) => {
+            {categoriesInOrder.map(cat => {
               const meta = categoryMeta[cat];
-              const items = products.filter((p) => p.category === cat);
+              const items = products.filter(p => p.category === cat);
               return (
                 <div key={cat} className={s.categorySection}>
                   <h3 className={s.categoryTitle}>{meta.label}</h3>
                   <div className={s.productGrid}>
-                    {items.map((product) => (
+                    {items.map(product => (
                       <ProductCard key={product.id} product={product} />
                     ))}
                   </div>
@@ -637,9 +610,7 @@ export default function Home() {
             <p className={s.sectionEyebrow}>Combinaciones listas</p>
             <h2 className={s.sectionTitle} id="packs-title">Nuestros packs</h2>
             <div className={s.packsGrid}>
-              {packs.map((pack) => (
-                <PackCard key={pack.id} pack={pack} />
-              ))}
+              {packs.map(pack => <PackCard key={pack.id} pack={pack} />)}
             </div>
           </div>
         </section>
@@ -650,9 +621,7 @@ export default function Home() {
             <p className={s.sectionEyebrow}>Inspiración para cocinar</p>
             <h2 className={s.sectionTitle} id="recetas-title">Recetas</h2>
             <div className={s.recetasGrid}>
-              {recipes.map((recipe) => (
-                <RecipeCard key={recipe.id} recipe={recipe} />
-              ))}
+              {recipes.map(recipe => <RecipeCard key={recipe.id} recipe={recipe} />)}
             </div>
           </div>
         </section>
@@ -690,7 +659,7 @@ export default function Home() {
             className={s.footerLogo}
           />
           <a
-            href={waLink()}
+            href={`https://wa.me/5491164034993?text=${encodeURIComponent('Hola, me gustaría hacer un pedido en Club de Mar.')}`}
             target="_blank"
             rel="noopener noreferrer"
             className={s.footerWa}
@@ -702,6 +671,9 @@ export default function Home() {
           </p>
         </div>
       </footer>
+
+      {/* ── Floating Cart ── */}
+      <CartPanel />
     </>
   );
 }
